@@ -37,16 +37,20 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .then(card => res.send({ data: card }))
+  .then((card) => {
+    if (card) return res.send({ card });
+    else {
+      res.status(404).send({ message: 'Пользователь по указанному _id не найден.' })
+    }
+  })
     .catch(err => {
-      console.log(err);
       if (err.name === 'ValidationError'){
 
-        res.status(400).send({message: 'ереданы некорректные данные для постановки/снятии лайка.'})
+        res.status(404).send({message: 'Переданы некорректные данные для постановки/снятии лайка.'})
       }
       else if (err.name === 'CastError'){
 
-        res.status(404).send({message: 'Передан несуществующий _id карточки'})
+        res.status(400).send({message: 'Передан несуществующий _id карточки'})
       }
       else{
         res.status(500).send({ message: err.message });
