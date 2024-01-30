@@ -24,9 +24,8 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deliteCard = (req, res) => {
-
-
-  Card.findByIdAndRemove(req.params.id)
+  console.log(req.params.cardId);
+  Card.findOneAndDelete(req.params.cardId)
     .then(card => res.send({ data: card }))
     .catch(err => res.status(404).send({message: 'Пользователь по указанному _id не найден.'}));
 }
