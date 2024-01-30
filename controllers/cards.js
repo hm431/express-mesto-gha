@@ -64,15 +64,23 @@ module.exports.dislikeCard = (req, res) => {
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
 )
+
+.then((card) => {
+  if (card) return res.send({ card });
+  else {
+    res.status(404).send({ message: 'Пользователь по указанному _id не найден.' })
+  }
+})
+
 .catch(err => {
 
   if (err.name === 'ValidationError'){
 
-    res.status(400).send({message: 'ереданы некорректные данные для постановки/снятии лайка.'})
+    res.status(404).send({message: 'ереданы некорректные данные для постановки/снятии лайка.'})
   }
   else if (err.name === 'CastError'){
 
-    res.status(404).send({message: 'Передан несуществующий _id карточки'})
+    res.status(400).send({message: 'Передан несуществующий _id карточки'})
   }
   else{
     res.status(500).send({ message: err.message });
