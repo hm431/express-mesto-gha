@@ -33,13 +33,13 @@ module.exports.deliteCard = (req, res) => {
 
 
 module.exports.likeCard = (req, res) => {
-
   Card.findByIdAndUpdate(req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
+    .then(card => res.send({ data: card }))
     .catch(err => {
-
+      console.log(err);
       if (err.name === 'ValidationError'){
 
         res.status(400).send({message: 'ереданы некорректные данные для постановки/снятии лайка.'})
