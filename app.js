@@ -29,7 +29,9 @@ app.use('/users', require('./routes/users.js'));
 app.use('/cards', require('./routes/cards.js'));
 
 
-
+app.use('/', (req, res) => {
+  res.status(404).send({ message: 'Неверный путь' });
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(PORT);
