@@ -16,7 +16,7 @@ module.exports.getIdUsers = (req, res) =>{
   .then((user) => {
     if (user) return res.send({ user });
     else {
-      res.status(400).send({message: 'Пользователь по указанному _id не найден.'})
+      res.status(404).send({message: 'Пользователь по указанному _id не найден.'})
     }
   })
     .catch(err => {
@@ -47,8 +47,9 @@ module.exports.createUsers = (req, res) => {
 
 
 module.exports.updateUserAbout =  (req, res) => {
-  const {_id, about} = req.body;
-  User.findByIdAndUpdate({_id}, {about})
+  const { name, about} = req.body;
+  const {_id} = req.user;
+  User.findByIdAndUpdate({_id}, {name, about})
     .then(user => res.send({ data: user }))
     .catch(err => res.status(500).send({ message: err.message }));
 };

@@ -18,10 +18,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
  // useCreateIndex: true,
  // useFindAndModify: false
 });
-
-app.use('/users', require('./routes/users.js'));
-app.use('/cards', require('./routes/cards.js'));
-
 app.use((req, res, next) => {
   req.user = {
     _id: '65b82f8e7fec660218d8826d' // вставьте сюда _id созданного в предыдущем пункте пользователя
@@ -29,6 +25,10 @@ app.use((req, res, next) => {
 
   next();
 });
+app.use('/users', require('./routes/users.js'));
+app.use('/cards', require('./routes/cards.js'));
+
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
