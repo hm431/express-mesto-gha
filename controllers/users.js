@@ -55,7 +55,7 @@ module.exports.updateUserAbout = (req, res) => {
     .catch(err => {
       if (err.name === 'ValidationError') {
 
-        res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара. ' })
+        res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля. ' })
       }
       else if (err.name === 'CastError') {
 
@@ -68,14 +68,16 @@ module.exports.updateUserAbout = (req, res) => {
     });
   }
   else{
-    res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара. ' });
+    res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля. ' });
   }
 };
 
 
 module.exports.updateUserAvatar = (req, res) => {
-  const { _id, avatar } = req.body;
-  User.findByIdAndUpdate({ _id }, { avatar })
+  const {avatar} = req.body;
+  const { _id } = req.user;
+  if (avatar){
+  User.findByIdAndUpdate({ _id }, { avatar }, { new: true, runValidators: true, })
     .then(user => res.send({ data: user }))
     .catch(err => {
 
@@ -92,4 +94,8 @@ module.exports.updateUserAvatar = (req, res) => {
         res.status(500).send({ message: err.message });
       }
     });//
+  }
+  else{
+    res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара. ' });
+  }
 };
