@@ -25,17 +25,17 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deliteCard = (req, res) => {
   console.log(req.params.cardId);
-  Card.findOneAndDelete(req.params.cardId)
+  Card.findById(req.params.cardId)
   .then((card) => {
 
     if (!card) {
       res.status(404).send({ message: 'Переданы некорректные данные  карточки.' })
     }
     else {
-      res.send({ card })
-    //  card.remove()
-    //  .then(() => res.send({ card }))
-    //  .catch(next);
+      console.log('ssss');
+      card.deleteOne()
+      .then(() => res.send({ card }))
+
     }
   })
     .catch(() => res.status(400).send({message: 'Пользователь по указанному _id не найден.'}));
