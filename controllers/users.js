@@ -13,7 +13,7 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getIdUsers = (req, res) => {
   const { userId } = req.params;
-  User.findById(userId).orFail
+  User.findById(userId).orFail()
     .then((user) => {
      return res.send({ user });
     })
