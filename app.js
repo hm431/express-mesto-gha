@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 var cors = require('cors')
+//const { errors } = require('celebrate');
 
 const { PORT = 3000} = process.env;
 
