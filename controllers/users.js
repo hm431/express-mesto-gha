@@ -4,7 +4,11 @@ const User = require('../models/user');
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then(users => res.send({ data: users }))
-    .catch(err => res.status(500).send({ message: err.message }));
+    .catch(err => {
+      res.status(500).send({ message: err.message })
+      console.error(err.message);
+    });
+
 };
 
 module.exports.getIdUsers = (req, res) => {
@@ -21,7 +25,8 @@ module.exports.getIdUsers = (req, res) => {
         res.status(400).send({ message: 'Пользователь по указанному _id не найден.' })
       }
       else {
-        res.status(500).send({ message: err.message });
+        res.status(500).send({ message: 'Ошибка по умолчанию' });
+        console.error(err.message);
       }
     });
 
@@ -37,7 +42,8 @@ module.exports.createUsers = (req, res) => {
         res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя.' })
       }
       else {
-        res.status(500).send({ message: err.message });
+        res.status(500).send({ message: 'Ошибка по умолчанию' });
+        console.error(err.message);
       }
     });//
 };
@@ -46,53 +52,51 @@ module.exports.createUsers = (req, res) => {
 module.exports.updateUserAbout = (req, res) => {
   const { name, about } = req.body;
   const { _id } = req.user;
-  if ((name) && (about)){
-  User.findByIdAndUpdate({ _id }, { name, about }, { new: true, runValidators: true, },)
-    .then(user => res.send({ user }))
-    .catch(err => {
-      if (err.name === 'ValidationError') {
+   //TODO Need to fix
+    User.findByIdAndUpdate({ _id }, { name, about }, { new: true, runValidators: true, },)
+      .then(user => res.send({ user }))
+      .catch(err => {
+        if (err.name === 'ValidationError') {
 
-        res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля. ' })
-      }
-      else if (err.name === 'CastError') {
+          res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля. ' })
+        }
+        else if (err.name === 'CastError') {
 
-        res.status(404).send({ message: 'Пользователь по указанному _id не найден.' })
-      }
-      else {
+          res.status(404).send({ message: 'Пользователь по указанному _id не найден.' })
+        }
+        else {
 
-        res.status(500).send({ message: err.message });
-      }
-    });
-  }
-  else{
-    res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля. ' });
-  }
+          res.status(500).send({ message: 'Ошибка по умолчанию' });
+          console.error(err.message);
+        }
+      });
 };
 
 
 module.exports.updateUserAvatar = (req, res) => {
-  const {avatar} = req.body;
+  const { avatar } = req.body;
   const { _id } = req.user;
-  if (avatar){
-  User.findByIdAndUpdate({ _id }, { avatar }, { new: true, runValidators: true, })
-    .then(user => res.send({ data: user }))
-    .catch(err => {
+  if (avatar) {  //TODO Need to fix
+    User.findByIdAndUpdate({ _id }, { avatar }, { new: true, runValidators: true, })
+      .then(user => res.send({ data: user }))
+      .catch(err => {
 
-      if (err.name === 'ValidationError') {
+        if (err.name === 'ValidationError') {
 
-        res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара. ' })
-      }
-      else if (err.name === 'CastError') {
+          res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара. ' })
+        }
+        else if (err.name === 'CastError') {
 
-        res.status(404).send({ message: 'Пользователь по указанному _id не найден.' })
-      }
-      else {
+          res.status(404).send({ message: 'Пользователь по указанному _id не найден.' })
+        }
+        else {
 
-        res.status(500).send({ message: err.message });
-      }
-    });//
+          res.status(500).send({ message: 'Ошибка по умолчанию' });
+          console.error(err.message);
+        }
+      });//
   }
-  else{
+  else {
     res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара. ' });
   }
 };
