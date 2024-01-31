@@ -5,7 +5,8 @@ const badRequest = require('../errors/BadRequest')
 const notFound = require('../errors/NotFound')
 const standartError = require('../errors/standartError');
 const { model } = require('mongoose');
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 
 module.exports.getUsers = (req, res) => {
