@@ -2,6 +2,11 @@ const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const {login, createUsers}  = require('./controllers/users.js');
+const auth = require('./middlewares/auth');
+//const createUser = require('./controllers/users.js');
+
+
 var cors = require('cors')
 //const { errors } = require('celebrate');
 
@@ -19,16 +24,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
  // useCreateIndex: true,
  // useFindAndModify: false
 });
-app.use((req, res, next) => {
-  req.user = {
-    _id: '65b82f8e7fec660218d8826d' // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
 
-  next();
-});
-app.use('/users', require('./routes/users.js'));
-app.use('/cards', require('./routes/cards.js'));
 
+
+app.use('/users', auth, require('./routes/users.js'));
+app.use('/cards', auth,require('./routes/cards.js'));
+app.post('/signin', login); // Логин пользователя
+app.post('/signup', createUsers);  // Создание пользователя
 
 app.use('/', (req, res) => {
   res.status(404).send({ message: 'Неверный путь' });
