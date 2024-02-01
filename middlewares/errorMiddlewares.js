@@ -13,7 +13,7 @@ module.exports.errorMiddlewares = (err, res) => {
     res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
   }
   else if  (err.code === 11000) {
-    res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
+    res.status(409).send({ message: 'Переданы некорректные данные' })
   }
   else if (err.name === 'DocumentNotFoundError') {
     res.status(notFound.statusCode).send({ message: 'Данные по указанному полю не найдены.' })
