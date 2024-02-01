@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const {errorMiddlewares} = require('../middlewares/errorMiddlewares');
 
 // напишите код здесь
 const userSchema = new mongoose.Schema({
@@ -28,31 +29,38 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: (email) => /.+@.+\..+/.test(email),
+      message: 'Требуется ввести электронный адрес',
     },
   },
   password: {
     type: String,
     required: true,
-    select: false,
+ //   select: false,
   },
 });
 
 
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email })
+  return this.findOne({email})
     .then((user) => {
+      console.log(user);
       if (!user) {
         return Promise.reject(new Error('EmailDosentExist'));
       }
       return bcrypt.compare(password, user.password)
+
         .then((matched) => {
+          console.log(user._id);
           if (!matched) {
             return Promise.reject(new Error('InvalidEmail'));
           }
 
           return user;
         });
-    });
+    })
+   // .catch((err) => {
+   //   errorMiddlewares(err);
+   // })
 };
 
 module.exports = mongoose.model('user', userSchema);

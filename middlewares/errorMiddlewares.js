@@ -4,7 +4,7 @@ const standartError = require('../errors/standartError');
 
 module.exports.errorMiddlewares = (err, res) => {
 
-  console.log(err.code);
+  //console.log(err.code);
   if (err.name === 'ValidationError') {
     res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
   }
