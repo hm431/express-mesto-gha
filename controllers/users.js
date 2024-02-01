@@ -59,6 +59,7 @@ module.exports.createUsers = (req, res) => {
       } else if (err.name === 'ValidationError') {
         next(new BadRequest(''));
       } else {
+
         next(err);
       }
     });
