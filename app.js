@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/users', auth, require('./routes/users.js'));
-app.use('/cards', auth,require('./routes/cards.js'));
+app.use('/cards', require('./routes/cards.js'));
 app.post('/signin', login); // Логин пользователя
 app.post('/signup', createUsers);  // Создание пользователя
 
