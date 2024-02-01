@@ -31,7 +31,7 @@ module.exports.errorMiddlewares = (err, res) => {
 
 
   else {
-    res.status(standartError.statusCode).send({ message: 'Ошибка по умолчанию' });
+    res.status(standartError.statusCode).send({ message: 'На сервере произошла ошибка' });
    // console.error(err.message);
   }
 };

@@ -11,7 +11,7 @@ var cors = require('cors')
 //const { errors } = require('celebrate');
 
 const { PORT = 3000} = process.env;
-
+const mongobd = 'mongodb://localhost:27017/mestodb';
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,22 +19,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var cors = require('cors')
 
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+mongoose.connect(mongobd, {
  // useNewUrlParser: true,
  // useCreateIndex: true,
  // useFindAndModify: false
 });
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '' // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
 
-  next();
-});
 
 app.use('/users', auth, require('./routes/users.js'));
-app.use('/cards', require('./routes/cards.js'));
+app.use('/cards', auth, require('./routes/cards.js'));
 app.post('/signin', login); // Логин пользователя
 app.post('/signup', createUsers);  // Создание пользователя
 
