@@ -30,8 +30,22 @@ mongoose.connect(mongobd, {
 
 app.use('/users', auth, require('./routes/users.js'));
 app.use('/cards', auth, require('./routes/cards.js'));
-app.post('/signin', login); // Логин пользователя
-app.post('/signup', createUsers);  // Создание пользователя
+app.post('/signin',celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(6),
+  }),
+}), login); // Логин пользователя
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(6),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi
+      .string()
+      .pattern(URL_REGEX),
+  }),}), createUsers);  // Создание пользователя
 
 app.use('/', (req, res) => {
   res.status(404).send({ message: 'Неверный путь' });
