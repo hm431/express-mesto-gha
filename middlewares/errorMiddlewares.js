@@ -1,4 +1,4 @@
-
+const StandartError = require('../errors/StandartError');
 
 module.exports.errorMiddlewares = (err, _, res, next) => {
   const statusCode = err.statusCode || 500;

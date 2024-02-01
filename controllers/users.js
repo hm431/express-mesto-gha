@@ -12,14 +12,14 @@ const BadRequest = require('../errors/NotFound');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then(users => res.send({ data: users }))
     .catch(next);
 
 };
 
-module.exports.getIdUsers = (req, res) => {
+module.exports.getIdUsers = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId).orFail()
     .then((user) => {
@@ -35,7 +35,7 @@ module.exports.getIdUsers = (req, res) => {
 
 };
 
-module.exports.createUsers = (req, res) => {
+module.exports.createUsers = (req, res, next) => {
   // const { name, about, avatar, email, password} = req.body;
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
@@ -66,7 +66,7 @@ module.exports.createUsers = (req, res) => {
 };
 
 
-module.exports.updateUserAbout = (req, res) => {
+module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
   const { _id } = req.user;
   User.findByIdAndUpdate({ _id }, { name, about }, { new: true, runValidators: true, },)
@@ -81,7 +81,7 @@ module.exports.updateUserAbout = (req, res) => {
 };
 
 
-module.exports.updateUserAvatar = (req, res) => {
+module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const { _id } = req.user;
   User.findByIdAndUpdate({ _id }, { avatar }, { new: true, runValidators: true, })
@@ -96,7 +96,7 @@ module.exports.updateUserAvatar = (req, res) => {
 };
 
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
