@@ -2,12 +2,16 @@ const badRequest = require('../errors/BadRequest')
 const notFound = require('../errors/NotFound')
 const standartError = require('../errors/standartError');
 
-module.exports.errorMiddlewares = (err) => {
+module.exports.errorMiddlewares = (err, res) => {
 
+  console.log(err.name);
   if (err.name === 'ValidationError') {
     res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
   }
 
+  else if (err.name === 'Error'){
+    res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
+  }
   else if  (err.code === 11000) {
     res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
   }
@@ -21,6 +25,6 @@ module.exports.errorMiddlewares = (err) => {
   }
   else {
     res.status(standartError.statusCode).send({ message: 'Ошибка по умолчанию' });
-    console.error(err.message);
+   // console.error(err.message);
   }
 };
