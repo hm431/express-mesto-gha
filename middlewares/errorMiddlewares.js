@@ -1,6 +1,4 @@
-const badRequest = require('../errors/BadRequest')
-const notFound = require('../errors/NotFound')
-const standartError = require('../errors/standartError');
+
 
 module.exports.errorMiddlewares = (err, _, res, next) => {
   const statusCode = err.statusCode || 500;
