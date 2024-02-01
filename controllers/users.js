@@ -84,6 +84,8 @@ module.exports.login = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(401).send({ message: err.message });
+      console.log(err);
+      //res.status(401).send({ message: err.message });
+      errorMiddlewares(err, res);
     });
 };

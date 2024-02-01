@@ -4,11 +4,16 @@ const standartError = require('../errors/standartError');
 
 module.exports.errorMiddlewares = (err, res) => {
 
- // console.log(err.code);
+  console.log(err.code);
   if (err.name === 'ValidationError') {
     res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
   }
-
+  else if (err.message === 'EmailDosentExist'){
+    res.status(401).send({ message: 'Неправильные почта или пароль' })
+  }
+  else if (err.message === 'InvalidEmail'){
+    res.status(400).send({ message: 'Неправильные почта или пароль' })
+  }
   else if (err.name === 'Error'){
     res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
   }
@@ -23,6 +28,8 @@ module.exports.errorMiddlewares = (err, res) => {
 
     res.status(notFound.statusCode).send({ message: 'Данные по указанному полю не найдены.' })
   }
+
+
   else {
     res.status(standartError.statusCode).send({ message: 'Ошибка по умолчанию' });
    // console.error(err.message);
