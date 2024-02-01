@@ -37,7 +37,7 @@ module.exports.createUsers = (req, res) => {
       name: req.body.name,
       about: req.body.about,
       avatar: req.body.avatar,
-    }))
+    })).select('+password')
     .then((user) => {
       res.status(201).send({
         user,
