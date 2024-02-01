@@ -14,9 +14,9 @@ module.exports.errorMiddlewares = (err, res) => {
   else if (err.message === 'InvalidEmail'){
     res.status(400).send({ message: 'Неправильные почта или пароль' })
   }
-  else if (err.name === 'Error'){
-    res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
-  }
+  //else if (err.name === 'Error'){
+  //  res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
+  //}
   else if  (err.code === 11000) {
     res.status(409).send({ message: 'Переданы некорректные данные' })
   }

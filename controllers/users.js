@@ -79,13 +79,13 @@ module.exports.login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      console.log('dfdfdf');
+     // console.log('dfdfdf');
       res.send({
         token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
       });
     })
     .catch((err) => {
-    //  console.log(err.code);
+      console.log(email, password);
    //   res.status(401).send({ message: err.message });
       errorMiddlewares(err, res);
     });
