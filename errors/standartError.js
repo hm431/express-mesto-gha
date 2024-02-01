@@ -1,7 +1,8 @@
-class standartError {
-  constructor() {
+class StandartError   extends Error {
+  constructor(message) {
+  super(message);
     this.statusCode = 500;
   }
 };
 
-module.exports =  standartError = new standartError;
+module.exports =  StandartError;

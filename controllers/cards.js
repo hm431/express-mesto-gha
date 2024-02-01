@@ -1,6 +1,11 @@
 const Card = require('../models/card');
 
-
+const Conflict = require('../errors/Conflict');
+const BadRequest = require('../errors/NotFound');
+const Forbidden = require('../errors/Forbidden');
+const NotFound = require('../errors/NotFound');
+const StandartError = require('../errors/StandartError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 
 
@@ -18,7 +23,11 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner })
     .then(card => res.send({ data: card }))
     .catch(err => {
-      errorMiddlewares(err, res);
+      if (err.name === 'ValidationError') {
+        next(new BadRequest(''));
+      } else {
+        next(err);
+      }
 
     });//
 };
@@ -30,10 +39,7 @@ module.exports.deliteCard = (req, res) => {
         card.deleteOne()
           .then(() => res.send({ card }))
     })
-    .catch((err) => {
-      errorMiddlewares(err, res);
-
-    });
+    .catch(next);
 }
 
 
@@ -47,7 +53,11 @@ module.exports.likeCard = (req, res) => {
 
     })
     .catch((err) => {
-      errorMiddlewares(err, res);
+      if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+        next(new BadRequest(''));
+      } else {
+        next(err);
+      }
 
     });
 };
@@ -64,7 +74,11 @@ module.exports.dislikeCard = (req, res) => {
     })
 
     .catch((err) => {
-      errorMiddlewares(err, res);
+      if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+        next(new BadRequest(''));
+      } else {
+        next(err);
+      }
     });
 
 }

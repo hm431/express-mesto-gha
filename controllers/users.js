@@ -1,18 +1,21 @@
 
 const User = require('../models/user');
-
-
-var userLogin = 0;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {errorMiddlewares} = require('../middlewares/errorMiddlewares');
+//const {errorMiddlewares} = require('../middlewares/errorMiddlewares');
+
+const Conflict = require('../errors/Conflict');
+const BadRequest = require('../errors/NotFound');
+const Forbidden = require('../errors/Forbidden');
+const NotFound = require('../errors/NotFound');
+const StandartError = require('../errors/StandartError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
+
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then(users => res.send({ data: users }))
-    .catch(err => {
-      errorMiddlewares(err, res);
-    });
+    .catch(next);
 
 };
 
@@ -23,7 +26,11 @@ module.exports.getIdUsers = (req, res) => {
       return res.send({ user });
     })
     .catch(err => {
-      errorMiddlewares(err, res);
+      if (err.name === 'CastError') {
+        next(new BadRequest(''));
+      } else {
+        next(err);
+      }
     });
 
 };
@@ -47,7 +54,13 @@ module.exports.createUsers = (req, res) => {
       });
     })
     .catch(err => {
-      errorMiddlewares(err, res);
+      if (err.code === 11000) {
+        next(new Conflict(''));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequest(''));
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -58,7 +71,11 @@ module.exports.updateUserAbout = (req, res) => {
   User.findByIdAndUpdate({ _id }, { name, about }, { new: true, runValidators: true, },)
     .then(user => res.send({ user }))
     .catch(err => {
-      errorMiddlewares(err, res);
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new BadRequest('я'));
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -69,7 +86,11 @@ module.exports.updateUserAvatar = (req, res) => {
   User.findByIdAndUpdate({ _id }, { avatar }, { new: true, runValidators: true, })
     .then(user => res.send({ data: user }))
     .catch(err => {
-      errorMiddlewares(err, res);
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new BadRequest('Переданы некорректные данные при обновлении профиля пользователя'));
+      } else {
+        next(err);
+      }
     });//
 };
 
@@ -79,13 +100,10 @@ module.exports.login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-     // console.log('dfdfdf');
       res.send({
         token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
       });
+      throw new UnauthorizedError('Неправильные почта или пароль');
     })
-    .catch((err) => {
-   //   res.status(401).send({ message: err.message });
-      errorMiddlewares(err, res);
-    });
+    .catch(next);
 };
