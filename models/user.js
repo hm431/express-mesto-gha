@@ -43,7 +43,9 @@ const userSchema = new mongoose.Schema({
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({email})
     .then((user) => {
-
+      if (!email){
+        return Promise.reject(new Error('InvalidEmail'));
+      }
       if (!user) {
         console.log('Pomogitre');
         return Promise.reject(new Error('EmailDosentExist'));
