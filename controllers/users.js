@@ -85,7 +85,6 @@ module.exports.login = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(email, password);
    //   res.status(401).send({ message: err.message });
       errorMiddlewares(err, res);
     });

@@ -6,6 +6,7 @@ const {login, createUsers}  = require('./controllers/users.js');
 const auth = require('./middlewares/auth');
 const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
+const {errorMiddlewares} = require('./middlewares/errorMiddlewares.js');
 //const createUser = require('./controllers/users.js');
 
 
@@ -57,5 +58,6 @@ app.use('/', (req, res) => {
   res.status(404).send({ message: 'Неверный путь' });
 });
 app.use(errors());
+app.use(errorMiddlewares);
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(PORT);

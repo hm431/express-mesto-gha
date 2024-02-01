@@ -2,6 +2,19 @@ const badRequest = require('../errors/BadRequest')
 const notFound = require('../errors/NotFound')
 const standartError = require('../errors/standartError');
 
+module.exports.errorMiddlewares = (err, _, res, next) => {
+  const statusCode = err.statusCode || 500;
+
+  const message = statusCode === 500 ? 'На сервере произошла ошибка' : err.message;
+  res.status(statusCode).send({ message });
+  next();
+};
+
+
+
+
+
+/*
 module.exports.errorMiddlewares = (err, res) => {
 
   console.log(err);
@@ -14,9 +27,9 @@ module.exports.errorMiddlewares = (err, res) => {
   else if (err.message === 'InvalidEmail'){
     res.status(400).send({ message: 'Неправильные почта или пароль' })
   }
-  //else if (err.name === 'Error'){
-  //  res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
-  //}
+  else if (err.name === 'Error'){
+    res.status(badRequest.statusCode).send({ message: 'Переданы некорректные данные' })
+  }
   else if  (err.code === 11000) {
     res.status(409).send({ message: 'Переданы некорректные данные' })
   }
@@ -34,4 +47,4 @@ module.exports.errorMiddlewares = (err, res) => {
     res.status(standartError.statusCode).send({ message: 'На сервере произошла ошибка' });
    // console.error(err.message);
   }
-};
+}; */
