@@ -30,8 +30,8 @@ mongoose.connect(mongobd, {
 
 app.use('/users', auth, require('./routes/users.js'));
 app.use('/cards', auth, require('./routes/cards.js'));
-app.post('/signin', login); // Логин пользователя
-app.post('/signup', createUsers);  // Создание пользователя
+app.post('/signup', login); // Логин пользователя
+app.post('/signin', createUsers);  // Создание пользователя
 
 app.use('/', (req, res) => {
   res.status(404).send({ message: 'Неверный путь' });
