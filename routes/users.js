@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const { getUsers, getIdUsers,  updateUserAbout, updateUserAvatar } = require('../controllers/users');
 
-router.get('/', getUsers); //Получить данные пользователей
+router.get('/me', getUsers); //Получить данные пользователей
 
 router.get('/:userId',celebrate({
   params: Joi.object().keys({
