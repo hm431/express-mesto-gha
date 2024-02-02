@@ -37,18 +37,21 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.deliteCard = (req, res, next) => {
   const { userId } = req.user;
-  if (userId === req.params.cardId){
+
+
   Card.findById(req.params.cardId).orFail()
     .then((card) => {
+      if (userId === card.owner.toString()){
         card.deleteOne()
           .then(() => res.send({ card }))
+      }
+      else{
+        next(new Forbidden('Отказано в удалении карточки.'));
+      }
     })
     .catch(next);
   }
-  else {
-    next(new Forbidden('Отказано в удалении карточки.'));
-  }
-}
+
 
 
 module.exports.likeCard = (req, res, next) => {

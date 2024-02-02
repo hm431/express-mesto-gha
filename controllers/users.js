@@ -28,10 +28,10 @@ module.exports.getUserInfo = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError'){
-        next(new NotFound('Пользователь с таким id не найден'));
+        next(new NotFound('Пользователь не найден'));
       }
      else  if (err.name === 'CastError') {
-        next(new Forbidden('Передан некорректный id'));
+        next(new Forbidden('Передан некорректный запрос'));
       } else {
         next(err);
       }
@@ -54,7 +54,7 @@ module.exports.getIdUsers = (req, res, next) => {
         next(new NotFound('Пользователь с таким id не найден'));
       }
       else if (err.name === 'CastError') {
-        next(new BadRequest('z'));
+        next(new BadRequest('Ошибка в запросе'));
       } else {
         next(err);
       }
@@ -84,9 +84,9 @@ module.exports.createUsers = (req, res, next) => {
     })
     .catch(err => {
       if (err.code === 11000) {
-        next(new Conflict(''));
+        next(new Conflict('Неверные данные'));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequest('z'));
+        next(new BadRequest('Ошибка в запросе'));
       } else {
         next(err);
       }
@@ -103,7 +103,7 @@ module.exports.updateUserAbout = (req, res, next) => {
     .catch(err => {
       console.log(err);
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequest('я'));
+        next(new BadRequest('Ошибка в запросе'));
       } else {
         next(err);
       }
@@ -122,7 +122,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
     .catch(err => {
       console.log(err);
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequest('я'));
+        next(new BadRequest('Ошибка в запросе'));
       } else {
         next(err);
       }
@@ -141,7 +141,7 @@ module.exports.login = (req, res, next) => {
         return res.send({ _id: token });
       }
 
-      throw new UnauthorizedError('Неправильные почта или пароль');
+      throw new Forbidden('Неправильные почта или пароль');
     })
     .catch(next);
 }
