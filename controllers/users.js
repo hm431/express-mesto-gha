@@ -10,7 +10,7 @@ const BadRequest = require('../errors/NotFound');
 //const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-const  userId  = '';
+var  LoginUserId  = '';
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -21,7 +21,7 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.getIdUsers = (req, res, next) => {
  // const { userId } = req.params;
-  User.findById(userId).orFail()
+  User.findById(LoginUserId).orFail()
     .then((user) => {
       if (user) return res.send({ user });
       throw new NotFound('Пользователь с таким id не найден');
@@ -48,13 +48,13 @@ module.exports.createUsers = (req, res, next) => {
       avatar: req.body.avatar,
     }))
     .then((user) => {
-      userId  = user._id;
+      LoginUserId  = user._id;
       res.status(201).send({
         email: user.email,
         name: user.name,
         about: user.about,
         avatar: user.avatar,
-        userId
+
       });
     })
     .catch(err => {
@@ -73,7 +73,7 @@ module.exports.createUsers = (req, res, next) => {
 module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
   //const { id } = req.params;
-  User.findByIdAndUpdate({ userId }, { name, about }, { new: true, runValidators: true, },)
+  User.findByIdAndUpdate({ LoginUserId }, { name, about }, { new: true, runValidators: true, },)
     .then(user => res.send({ user }))
     .catch(err => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -88,7 +88,7 @@ module.exports.updateUserAbout = (req, res, next) => {
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   //const { id } = req.params;
-  User.findByIdAndUpdate({ userId }, { avatar }, { new: true, runValidators: true, })
+  User.findByIdAndUpdate({ LoginUserId }, { avatar }, { new: true, runValidators: true, })
     .then(user => res.send({ data: user }))
     .catch(err => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -104,7 +104,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      userId  = user._id;
+      LoginUserId  = user._id;
       res.send({
         token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
       });
