@@ -1,8 +1,8 @@
 class StandartError   extends Error {
   constructor(message) {
   super(message);
-    this.statusCode = 500;
+  this.statusCode = 500;
   }
 };
 
-module.exports =  StandartError;
+module.exports =  StandartError = new StandartError('На сервере произошла ошибка');

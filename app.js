@@ -8,7 +8,7 @@ const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
 const {errorMiddlewares} = require('./middlewares/errorMiddlewares.js');
 //const createUser = require('./controllers/users.js');
-
+const NotFound = require('./errors/NotFound');
 
 var cors = require('cors')
 //const { errors } = require('celebrate');
@@ -60,7 +60,7 @@ app.post('/signup', celebrate({
   app.use('/cards', auth, require('./routes/cards.js'));
 
 app.use('/', (req, res) => {
-  res.status(404).send({ message: 'Неверный путь' });
+  throw new NotFound('Путь не найден');
 });
 app.use(errors());
 app.use(errorMiddlewares);
