@@ -10,12 +10,10 @@ const Forbidden = require('../errors/Forbidden');
 const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-
+ let LoginUserId  = '';
 
 
 module.exports.getUsers = (req, res, next) => {
-
-
   User.find({})
     .then(users => res.send({ data: users }))
     .catch(next);
@@ -23,7 +21,7 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  User.findById({_id: userIdr})
+  User.findById({_id: LoginUserId})
     .then((user) => {
        return res.send({ user });
 
@@ -75,7 +73,7 @@ module.exports.createUsers = (req, res, next) => {
       avatar: req.body.avatar,
     }))
     .then((user) => {
-
+      LoginUserId  = user._id;
       res.status(201).send({
         email: user.email,
         name: user.name,
@@ -98,8 +96,8 @@ module.exports.createUsers = (req, res, next) => {
 
 module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
-  const { userId } = req.user;
-  User.findByIdAndUpdate({ _id: userId }, { name, about }, { new: true, runValidators: true, })
+  //const { id } = req.params;
+  User.findByIdAndUpdate({ _id: LoginUserId }, { name, about }, { new: true, runValidators: true, })
     .then(user =>{
       res.send({ user })})
     .catch(err => {
@@ -116,8 +114,8 @@ module.exports.updateUserAbout = (req, res, next) => {
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
-  const { userId } = req.user;
-  User.findByIdAndUpdate({ _id: userId }, { avatar }, { new: true, runValidators: true, })
+  //const { id } = req.params;
+  User.findByIdAndUpdate({ _id: LoginUserId }, { avatar }, { new: true, runValidators: true, })
     .then(user => {
       res.send({ data: user })
     })
@@ -135,11 +133,17 @@ module.exports.updateUserAvatar = (req, res, next) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findUserByCredentials(email, password)
+  User
+    .findUserByCredentials(email, password)
     .then(({ _id: userId }) => {
       if (userId) {
-        const token =  jwt.sign({ _id: userId }, 'super-strong-secret', { expiresIn: '7d' });
-        return res.send({ token: token });
+        const token = jwt.sign(
+          { userId },
+          'super-strong-secret',
+          { expiresIn: '7d' },
+        );
+
+        return res.send({ _id: token });
       }
 
       throw new UnauthorizedError('Неправильные почта или пароль');
