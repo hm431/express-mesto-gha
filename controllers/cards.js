@@ -24,7 +24,7 @@ module.exports.createCard = (req, res, next) => {
     .then(card => res.send({ data: card }))
     .catch(err => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest(''));
+        next(new BadRequest('z'));
       } else {
         next(err);
       }
@@ -54,7 +54,7 @@ module.exports.likeCard = (req, res, next) => {
     })
     .catch((err) => {
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
-        next(new BadRequest(''));
+        next(new BadRequest('z'));
       } else {
         next(err);
       }
@@ -75,7 +75,7 @@ module.exports.dislikeCard = (req, res, next) => {
 
     .catch((err) => {
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
-        next(new BadRequest(''));
+        next(new BadRequest('z'));
       } else {
         next(err);
       }

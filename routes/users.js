@@ -5,7 +5,10 @@ const { getUsers, getIdUsers,  updateUserAbout, updateUserAvatar } = require('..
 
 router.get('/', getUsers); //Получить данные пользователей
 
-router.get('/:userId',celebrate({
+
+
+
+router.get('/me',celebrate({
   params: Joi.object().keys({
     userId: Joi.string()
     .length(24)

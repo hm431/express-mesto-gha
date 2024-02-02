@@ -10,7 +10,7 @@ const BadRequest = require('../errors/NotFound');
 //const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-//const { _id } = '';
+const  userId  = '';
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -20,15 +20,16 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getIdUsers = (req, res, next) => {
-  const { userId } = req.params;
+ // const { userId } = req.params;
   User.findById(userId).orFail()
     .then((user) => {
-
-      return res.send({ user });
+      if (user) return res.send({ user });
+      throw new NotFound('Пользователь с таким id не найден');
+      ;
     })
     .catch(err => {
       if (err.name === 'CastError') {
-        next(new BadRequest(''));
+        next(new BadRequest('z'));
       } else {
         next(err);
       }
@@ -47,20 +48,20 @@ module.exports.createUsers = (req, res, next) => {
       avatar: req.body.avatar,
     }))
     .then((user) => {
-      const { _id } = user;
+      userId  = user._id;
       res.status(201).send({
         email: user.email,
         name: user.name,
         about: user.about,
         avatar: user.avatar,
-        _id
+        userId
       });
     })
     .catch(err => {
       if (err.code === 11000) {
         next(new Conflict(''));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequest(''));
+        next(new BadRequest('z'));
       } else {
 
         next(err);
@@ -71,8 +72,8 @@ module.exports.createUsers = (req, res, next) => {
 
 module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
-  const { id } = req.params;
-  User.findByIdAndUpdate({ _id }, { name, about }, { new: true, runValidators: true, },)
+  //const { id } = req.params;
+  User.findByIdAndUpdate({ userId }, { name, about }, { new: true, runValidators: true, },)
     .then(user => res.send({ user }))
     .catch(err => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -86,8 +87,8 @@ module.exports.updateUserAbout = (req, res, next) => {
 
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  const { id } = req.params;
-  User.findByIdAndUpdate({ _id }, { avatar }, { new: true, runValidators: true, })
+  //const { id } = req.params;
+  User.findByIdAndUpdate({ userId }, { avatar }, { new: true, runValidators: true, })
     .then(user => res.send({ data: user }))
     .catch(err => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -103,7 +104,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      console.log(user);
+      userId  = user._id;
       res.send({
         token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
       });

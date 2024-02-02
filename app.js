@@ -30,7 +30,7 @@ mongoose.connect(mongobd, {
 
 
 
-app.use('/users', auth, require('./routes/users.js'));
+app.use('/users',  require('./routes/users.js'));
 app.use('/cards', auth, require('./routes/cards.js'));
 
 
