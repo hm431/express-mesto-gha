@@ -23,7 +23,7 @@ module.exports.createCard = (req, res, next) => {
 
  // const { userId } = req.params;
 
-  Card.create({ name, link, LoginUserId })
+  Card.create({ name, link, owner: LoginUserId })
     .then(card => res.send({ data: card }))
     .catch(err => {
       console.log(err);
