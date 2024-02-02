@@ -10,8 +10,8 @@ const Forbidden = require('../errors/Forbidden');
 const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-module.exports.LoginUserId  = '';
-LoginUserId = '65bc3ef2e27e6d0ef1fc1f8c';
+ let LoginUserId  = '';
+
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -132,7 +132,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
+   User.findUserByCredentials(email, password)
     .then((user) => {
       LoginUserId  = user._id;
       res.send({

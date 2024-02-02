@@ -1,6 +1,6 @@
 
 const Card = require('../models/card');
-
+const auth = require('../middlewares/auth');
 //const Conflict = require('../errors/Conflict');
 const BadRequest = require('../errors/NotFound');
 //const Forbidden = require('../errors/Forbidden');
@@ -12,6 +12,7 @@ const BadRequest = require('../errors/NotFound');
 
 
 module.exports.getCard = (req, res, next) => {
+  res.send({ data: req });
   Card.find({})
     .then(card => res.send({ data: card }))
     .catch(err => errorMiddlewares(err, res)
