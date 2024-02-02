@@ -36,13 +36,18 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deliteCard = (req, res, next) => {
-  console.log(req.params.cardId);
+  const { userId } = req.user;
+  if (userId === req.params.cardId){
   Card.findById(req.params.cardId).orFail()
     .then((card) => {
         card.deleteOne()
           .then(() => res.send({ card }))
     })
     .catch(next);
+  }
+  else {
+    next(new BadRequest('z'));
+  }
 }
 
 

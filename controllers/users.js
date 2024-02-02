@@ -137,12 +137,7 @@ module.exports.login = (req, res, next) => {
     .findUserByCredentials(email, password)
     .then(({ _id: userId }) => {
       if (userId) {
-        const token = jwt.sign(
-          { userId },
-          'super-strong-secret',
-          { expiresIn: '7d' },
-        );
-
+        const token = jwt.sign( { userId },'super-strong-secret',{ expiresIn: '7d' },);
         return res.send({ _id: token });
       }
 
@@ -167,15 +162,3 @@ module.exports.login = (req, res, next) => {
 
 
 
-
-/*   const { email, password } = req.body;
-   User.findUserByCredentials(email, password)
-   .then((user) => {
-      LoginUserId  = user._id;
-      res.send({
-        token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
-      });
-      throw new UnauthorizedError('Неправильные почта или пароль');
-    })
-    .catch(next);
-}; */
