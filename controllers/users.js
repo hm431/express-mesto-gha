@@ -52,7 +52,8 @@ module.exports.createUsers = (req, res, next) => {
         email: user.email,
         name: user.name,
         about: user.about,
-        avatar: user.avatar
+        avatar: user.avatar,
+        _id
       });
     })
     .catch(err => {
@@ -70,7 +71,7 @@ module.exports.createUsers = (req, res, next) => {
 
 module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
-  const { _id } = req.user;
+  const { id } = req.params;
   User.findByIdAndUpdate({ _id }, { name, about }, { new: true, runValidators: true, },)
     .then(user => res.send({ user }))
     .catch(err => {
@@ -85,7 +86,7 @@ module.exports.updateUserAbout = (req, res, next) => {
 
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  const { _id } = req.user;
+  const { id } = req.params;
   User.findByIdAndUpdate({ _id }, { avatar }, { new: true, runValidators: true, })
     .then(user => res.send({ data: user }))
     .catch(err => {
