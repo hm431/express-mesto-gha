@@ -20,7 +20,7 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  User.findById(LoginUserId)
+  User.findById({_id: LoginUserId}, { new: true, runValidators: true, })
     .then((user) => {
       if (user) return res.send({ user });
       throw new NotFoundE('Пользователь с таким id не найден');
