@@ -27,7 +27,7 @@ module.exports.createCard = (req, res, next) => {
     .then(card => res.send({ data: card }))
     .catch(err => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('z'));
+        next(new BadRequest('Ошибка запроса'));
       } else {
         next(err);
       }
@@ -46,7 +46,7 @@ module.exports.deliteCard = (req, res, next) => {
     .catch(next);
   }
   else {
-    next(new BadRequest('z'));
+    next(new Forbidden('Отказано в удалении карточки.'));
   }
 }
 
@@ -64,7 +64,7 @@ module.exports.likeCard = (req, res, next) => {
     .catch((err) => {
 
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
-        next(new BadRequest('z'));
+        next(new BadRequest('Ошибка в запросе'));
       } else {
         next(err);
       }
@@ -86,7 +86,7 @@ module.exports.dislikeCard = (req, res, next) => {
 
     .catch((err) => {
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
-        next(new BadRequest('z'));
+        next(new BadRequest('Ошибка в запросе'));
       } else {
         next(err);
       }
