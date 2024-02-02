@@ -3,8 +3,8 @@ const Card = require('../models/card');
 const auth = require('../middlewares/auth');
 //const Conflict = require('../errors/Conflict');
 const BadRequest = require('../errors/NotFound');
-//const Forbidden = require('../errors/Forbidden');
-//const NotFound = require('../errors/NotFound');
+const Forbidden = require('../errors/Forbidden');
+const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 //const UnauthorizedError = require('../errors/UnauthorizedError');
 
@@ -19,7 +19,7 @@ module.exports.getCard = (req, res, next) => {
 };
 
 module.exports.createCard = (req, res, next) => {
- // console.log(req.user);
+
   const { name, link } = req.body;
   const { userId } = req.user;
 
@@ -32,7 +32,7 @@ module.exports.createCard = (req, res, next) => {
         next(err);
       }
 
-    });//
+    });
 };
 
 module.exports.deliteCard = (req, res, next) => {
@@ -53,7 +53,8 @@ module.exports.deliteCard = (req, res, next) => {
 
 module.exports.likeCard = (req, res, next) => {
   const { userId } = req.user;
-  Card.findByIdAndUpdate(req.params.cardId,
+  const {cardId} = req.params;
+  Card.findByIdAndUpdate(cardId,
     { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
     { new: true },
   ).orFail()
@@ -63,7 +64,10 @@ module.exports.likeCard = (req, res, next) => {
     })
     .catch((err) => {
 
-      if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+      if (err.name === 'DocumentNotFoundError'){
+        next(new NotFound('Карточка с такими данными не найдена'));
+      }
+      else if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
         next(new BadRequest('Ошибка в запросе'));
       } else {
         next(err);
@@ -85,6 +89,9 @@ module.exports.dislikeCard = (req, res, next) => {
     })
 
     .catch((err) => {
+      if (err.name === 'DocumentNotFoundError'){
+        next(new NotFound('Карточка с такими данными не найдена'));
+      }
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
         next(new BadRequest('Ошибка в запросе'));
       } else {
