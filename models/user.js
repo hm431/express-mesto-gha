@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const {errorMiddlewares} = require('../middlewares/errorMiddlewares');
+//const {errorMiddlewares} = require('../middlewares/errorMiddlewares');
 
 // напишите код здесь
 const userSchema = new mongoose.Schema({

@@ -37,7 +37,7 @@ module.exports.getIdUsers = (req, res, next) => {
 
 module.exports.createUsers = (req, res, next) => {
 
-  bcrypt.hash(req.body.password, 10).select("+password")
+  bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       password: hash,
       email: req.body.email,
@@ -99,7 +99,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password).select("+password")
     .then((user) => {
       res.send({
         token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
