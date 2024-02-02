@@ -30,8 +30,7 @@ mongoose.connect(mongobd, {
 
 
 
-app.use('/users', auth, require('./routes/users.js'));
-app.use('/cards', auth, require('./routes/cards.js'));
+
 
 // auth,
 app.post('/signin',celebrate({
@@ -53,6 +52,12 @@ app.post('/signup', celebrate({
       .string()
       .pattern(new RegExp(/^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9\-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-\/])*)?/)),
   }),}), createUsers);  // Создание пользователя
+
+
+  app.use(auth);
+
+  app.use('/users', require('./routes/users.js'));
+  app.use('/cards',  require('./routes/cards.js'));
 
 app.use('/', (req, res) => {
   res.status(404).send({ message: 'Неверный путь' });
