@@ -7,10 +7,12 @@ const handleAuthError = (res) => {
 };
 
 const extractBearerToken = (header) => {
+  console.log('fdfd');
   return header.replace('Bearer ', '');
 };
 
 module.exports = (req, res, next) => {
+
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
@@ -27,6 +29,6 @@ module.exports = (req, res, next) => {
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
-
+   console.log('fdfd');
   next(); // пропускаем запрос дальше
 };
