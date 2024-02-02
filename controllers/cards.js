@@ -44,6 +44,7 @@ module.exports.deliteCard = (req, res, next) => {
 
 
 module.exports.likeCard = (req, res, next) => {
+
   Card.findByIdAndUpdate(req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
@@ -53,6 +54,7 @@ module.exports.likeCard = (req, res, next) => {
 
     })
     .catch((err) => {
+
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
         next(new BadRequest('z'));
       } else {

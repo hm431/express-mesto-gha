@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const Conflict = require('../errors/Conflict');
 const BadRequest = require('../errors/NotFound');
 const Forbidden = require('../errors/Forbidden');
-//const NotFound = require('../errors/NotFound');
+const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 var  LoginUserId  = '65bc3ef2e27e6d0ef1fc1f8c';
@@ -41,12 +41,14 @@ module.exports.getIdUsers = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId).orFail()
     .then((user) => {
-      if (user) return res.send({ user });
-      throw new NotFound('Пользователь с таким id не найден');
-      ;
+      return res.send({ user });
     })
     .catch(err => {
-      if (err.name === 'CastError') {
+      console.log(err);
+      if (err.name === 'DocumentNotFoundError'){
+        next(new NotFound('Пользователь с таким id не найден'));
+      }
+      else if (err.name === 'CastError') {
         next(new BadRequest('z'));
       } else {
         next(err);
@@ -110,7 +112,6 @@ module.exports.updateUserAvatar = (req, res, next) => {
   //const { id } = req.params;
   User.findByIdAndUpdate({ _id: LoginUserId }, { avatar }, { new: true, runValidators: true, })
     .then(user => {
-      console.log('dfdfd');
       res.send({ data: user })
     })
     .catch(err => {

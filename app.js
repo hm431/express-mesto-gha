@@ -31,9 +31,9 @@ mongoose.connect(mongobd, {
 
 
 app.use('/users',  require('./routes/users.js'));
-app.use('/cards', auth, require('./routes/cards.js'));
+app.use('/cards',  require('./routes/cards.js'));
 
-
+// auth,
 app.post('/signin',celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
