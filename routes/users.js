@@ -3,7 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 const { getUsers, getIdUsers,  updateUserAbout, updateUserAvatar } = require('../controllers/users');
 
 
-router.get('/me', getUsers); //Получить данные пользователей
+router.get('/', getUsers); //Получить данные пользователей
 
 router.get('/:userId',celebrate({
   params: Joi.object().keys({
