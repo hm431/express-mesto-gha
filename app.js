@@ -54,10 +54,10 @@ app.post('/signup', celebrate({
   }),}), createUsers);  // Создание пользователя
 
 
-  app.use(auth);
 
-  app.use('/users', require('./routes/users.js'));
-  app.use('/cards',  require('./routes/cards.js'));
+
+  app.use('/users', auth, require('./routes/users.js'));
+  app.use('/cards', auth, require('./routes/cards.js'));
 
 app.use('/', (req, res) => {
   res.status(404).send({ message: 'Неверный путь' });
