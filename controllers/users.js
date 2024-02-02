@@ -21,13 +21,15 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  const { userId } = req.params;
+  const { userId } = req.user;
+
   User.findById({_id: userId})
     .then((user) => {
        return res.send({ user });
 
     })
     .catch((err) => {
+
       if (err.name === 'DocumentNotFoundError'){
         next(new NotFound('Пользователь не найден'));
       }
@@ -145,7 +147,7 @@ module.exports.login = (req, res, next) => {
 
       throw new Forbidden('Неправильные почта или пароль');
     })
-    .catch(next);
+    .catch(next); //TODo
 }
 
 
