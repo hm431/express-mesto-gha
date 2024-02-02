@@ -10,7 +10,7 @@ const Forbidden = require('../errors/Forbidden');
 const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-var  LoginUserId  = '65bc3ef2e27e6d0ef1fc1f8c';
+//var  LoginUserId  = '65bc3ef2e27e6d0ef1fc1f8c';
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -20,7 +20,8 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  User.findById({_id: LoginUserId})
+  const { userId } = req.params;
+  User.findById({userId})
     .then((user) => {
       if (user) return res.send({ user });
       throw new NotFoundE('Пользователь с таким id не найден');
@@ -44,7 +45,7 @@ module.exports.getIdUsers = (req, res, next) => {
       return res.send({ user });
     })
     .catch(err => {
-      console.log(err);
+
       if (err.name === 'DocumentNotFoundError'){
         next(new NotFound('Пользователь с таким id не найден'));
       }
@@ -91,8 +92,8 @@ module.exports.createUsers = (req, res, next) => {
 
 module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
-  //const { id } = req.params;
-  User.findByIdAndUpdate({ _id: LoginUserId }, { name, about }, { new: true, runValidators: true, })
+  const { userId } = req.params;
+  User.findByIdAndUpdate({ userId }, { name, about }, { new: true, runValidators: true, })
     .then(user =>{
       res.send({ user })})
     .catch(err => {
@@ -109,8 +110,8 @@ module.exports.updateUserAbout = (req, res, next) => {
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
-  //const { id } = req.params;
-  User.findByIdAndUpdate({ _id: LoginUserId }, { avatar }, { new: true, runValidators: true, })
+  const { userId } = req.params;
+  User.findByIdAndUpdate({ userId }, { avatar }, { new: true, runValidators: true, })
     .then(user => {
       res.send({ data: user })
     })

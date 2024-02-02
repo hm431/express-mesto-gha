@@ -18,11 +18,15 @@ module.exports.getCard = (req, res, next) => {
 };
 
 module.exports.createCard = (req, res, next) => {
+ // console.log(req.user);
   const { name, link } = req.body;
-  const owner = req.user._id;
-  Card.create({ name, link, owner })
+
+  const { userId } = req.params;
+
+  Card.create({ name, link, userId })
     .then(card => res.send({ data: card }))
     .catch(err => {
+      console.log(err);
       if (err.name === 'ValidationError') {
         next(new BadRequest('z'));
       } else {
@@ -44,9 +48,9 @@ module.exports.deliteCard = (req, res, next) => {
 
 
 module.exports.likeCard = (req, res, next) => {
-
+  const { userId } = req.params;
   Card.findByIdAndUpdate(req.params.cardId,
-    { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+    { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
     { new: true },
   ).orFail()
     .then((card) => {
@@ -65,9 +69,10 @@ module.exports.likeCard = (req, res, next) => {
 };
 
 module.exports.dislikeCard = (req, res, next) => {
+  const { userId } = req.params;
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: req.user._id } }, // убрать _id из массива
+    { $pull: { likes: userId } }, // убрать _id из массива
     { new: true },
   ).orFail()
 
