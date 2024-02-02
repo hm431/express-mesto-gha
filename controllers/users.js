@@ -92,7 +92,6 @@ module.exports.updateUserAbout = (req, res, next) => {
   //const { id } = req.params;
   User.findByIdAndUpdate({ _id: LoginUserId }, { name, about }, { new: true, runValidators: true, })
     .then(user =>{
-      console.log('ssss');
       res.send({ user })})
     .catch(err => {
       console.log(err);
@@ -107,12 +106,17 @@ module.exports.updateUserAbout = (req, res, next) => {
 
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
+
   //const { id } = req.params;
-  User.findByIdAndUpdate({ _id: LoginUserId  }, { avatar }, { new: true, runValidators: true, })
-    .then(user => res.send({ data: user }))
+  User.findByIdAndUpdate({ _id: LoginUserId }, { avatar }, { new: true, runValidators: true, })
+    .then(user => {
+      console.log('dfdfd');
+      res.send({ data: user })
+    })
     .catch(err => {
+      console.log(err);
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные при обновлении профиля пользователя'));
+        next(new BadRequest('я'));
       } else {
         next(err);
       }
