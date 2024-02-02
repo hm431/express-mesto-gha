@@ -10,7 +10,7 @@ const BadRequest = require('../errors/NotFound');
 //const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-
+//const { _id } = '';
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -23,6 +23,7 @@ module.exports.getIdUsers = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId).orFail()
     .then((user) => {
+
       return res.send({ user });
     })
     .catch(err => {
@@ -46,6 +47,7 @@ module.exports.createUsers = (req, res, next) => {
       avatar: req.body.avatar,
     }))
     .then((user) => {
+      const { _id } = user;
       res.status(201).send({
         email: user.email,
         name: user.name,

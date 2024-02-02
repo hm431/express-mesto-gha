@@ -30,8 +30,8 @@ mongoose.connect(mongobd, {
 
 
 
-app.use('/users', auth, require('./routes/users.js'));
-app.use('/cards', auth, require('./routes/cards.js'));
+app.use('/users', /*auth,*/ require('./routes/users.js'));
+app.use('/cards', /*auth,*/ require('./routes/cards.js'));
 
 
 app.post('/signin',celebrate({
