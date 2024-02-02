@@ -12,7 +12,6 @@ const BadRequest = require('../errors/NotFound');
 
 
 module.exports.getCard = (req, res, next) => {
-  res.send({ data: req });
   Card.find({})
     .then(card => res.send({ data: card }))
     .catch(err => errorMiddlewares(err, res)
@@ -23,7 +22,7 @@ module.exports.createCard = (req, res, next) => {
  // console.log(req.user);
   const { name, link } = req.body;
 
-  const { userId } = req.params;
+  const { userId } = req.user;
 
   Card.create({ name, link, owner: userId })
     .then(card => res.send({ data: card }))
@@ -50,7 +49,7 @@ module.exports.deliteCard = (req, res, next) => {
 
 
 module.exports.likeCard = (req, res, next) => {
-  const { userId } = req.params;
+  const { userId } = req.user;
   Card.findByIdAndUpdate(req.params.cardId,
     { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
     { new: true },
@@ -71,7 +70,7 @@ module.exports.likeCard = (req, res, next) => {
 };
 
 module.exports.dislikeCard = (req, res, next) => {
-  const { userId } = req.params;
+  const { userId } = req.user;
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: userId } }, // убрать _id из массива

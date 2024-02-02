@@ -23,7 +23,7 @@ module.exports = (req, res, next) => {
 
   const token = extractBearerToken(authorization);
   let payload;
-  console.log(dddd);
+
   try {
     payload = jwt.verify(token, 'super-strong-secret');
   } catch (err) {

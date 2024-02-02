@@ -31,7 +31,7 @@ mongoose.connect(mongobd, {
 
 
 app.use('/users', auth, require('./routes/users.js'));
-app.use('/cards',  require('./routes/cards.js'));
+app.use('/cards', auth, require('./routes/cards.js'));
 
 // auth,
 app.post('/signin',celebrate({
