@@ -3,7 +3,7 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 //const {errorMiddlewares} = require('../middlewares/errorMiddlewares');
-
+const {SUPERSTRONGSECRET} = require('../utils/constants')
 const Conflict = require('../errors/Conflict');
 const BadRequest = require('../errors/NotFound');
 const Forbidden = require('../errors/Forbidden');
@@ -137,7 +137,7 @@ module.exports.login = (req, res, next) => {
     .findUserByCredentials(email, password)
     .then(({ _id: userId }) => {
       if (userId) {
-        const token = jwt.sign( { userId },'super-strong-secret',{ expiresIn: '7d' },);
+        const token = jwt.sign( { userId },SUPERSTRONGSECRET,{ expiresIn: '7d' },);
         return res.send({ _id: token });
       }
 

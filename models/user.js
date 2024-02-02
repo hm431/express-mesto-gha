@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const {URL_REG} = require('../utils/constants');
 //const {errorMiddlewares} = require('../middlewares/errorMiddlewares');
 
 // напишите код здесь
@@ -19,9 +20,9 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-  //  validate: {
-  //    validator: (avatar) => /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9\-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-\/])*)?/.test(avatar),
-   // },
+    validate: {
+      validator: (avatar) => URL_REG.test(avatar),
+    },
   },
   email: {
     type: String,
@@ -63,8 +64,6 @@ userSchema.statics.findUserByCredentials = function (email, password) {
           return user;
         });
     })
- //  .catch((err) => {
-//      errorMiddlewares(err);
     };
 
 module.exports = mongoose.model('user', userSchema);
