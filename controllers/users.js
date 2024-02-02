@@ -38,8 +38,8 @@ module.exports.getUserInfo = (req, res, next) => {
 
 
 module.exports.getIdUsers = (req, res, next) => {
- // const { userId } = req.params;
-  User.findById(LoginUserId).orFail()
+  const { userId } = req.params;
+  User.findById(userId).orFail()
     .then((user) => {
       if (user) return res.send({ user });
       throw new NotFound('Пользователь с таким id не найден');

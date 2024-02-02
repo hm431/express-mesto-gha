@@ -8,7 +8,7 @@ router.get('/', getUsers); //Получить данные пользовате�
 
 router.get('/me', getUserInfo);
 
-router.get('/me',celebrate({
+router.get('/:userId',celebrate({
   params: Joi.object().keys({
     userId: Joi.string()
     .length(24)
