@@ -10,7 +10,7 @@ const Forbidden = require('../errors/Forbidden');
 //const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-var  LoginUserId  = '65bc3ef2e27e6d0ef1fc1f8c';
+var  LoginUserId  = '';
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
