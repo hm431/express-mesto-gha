@@ -10,7 +10,7 @@ const Forbidden = require('../errors/Forbidden');
 const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
- let LoginUserId  = '';
+
 
 
 module.exports.getUsers = (req, res, next) => {
@@ -21,7 +21,8 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  User.findById({_id: LoginUserId})
+  const { userId } = req.params;
+  User.findById({_id: userId})
     .then((user) => {
        return res.send({ user });
 
@@ -83,6 +84,7 @@ module.exports.createUsers = (req, res, next) => {
       });
     })
     .catch(err => {
+
       if (err.code === 11000) {
         next(new Conflict('Неверные данные'));
       } else if (err.name === 'ValidationError') {

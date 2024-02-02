@@ -9,6 +9,7 @@ const { celebrate, Joi } = require('celebrate');
 const {errorMiddlewares} = require('./middlewares/errorMiddlewares.js');
 //const createUser = require('./controllers/users.js');
 const NotFound = require('./errors/NotFound');
+const UnauthorizedError = require('./errors/UnauthorizedError.js');
 
 var cors = require('cors')
 //const { errors } = require('celebrate');
@@ -60,7 +61,7 @@ app.post('/signup', celebrate({
   app.use('/cards', auth, require('./routes/cards.js'));
 
 app.use('/', (req, res) => {
-  throw new NotFound('Путь не найден');
+  throw new UnauthorizedError('Путь не найден');
 });
 app.use(errors());
 app.use(errorMiddlewares);
