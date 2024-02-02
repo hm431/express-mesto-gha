@@ -6,7 +6,7 @@ const BadRequest = require('../errors/NotFound');
 //const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 //const UnauthorizedError = require('../errors/UnauthorizedError');
-
+var {LoginUserId} = require('./users');
 
 
 
@@ -21,9 +21,9 @@ module.exports.createCard = (req, res, next) => {
  // console.log(req.user);
   const { name, link } = req.body;
 
-  const { userId } = req.params;
+ // const { userId } = req.params;
 
-  Card.create({ name, link, userId })
+  Card.create({ name, link, LoginUserId })
     .then(card => res.send({ data: card }))
     .catch(err => {
       console.log(err);
@@ -48,9 +48,9 @@ module.exports.deliteCard = (req, res, next) => {
 
 
 module.exports.likeCard = (req, res, next) => {
-  const { userId } = req.params;
+ // const { userId } = req.params;
   Card.findByIdAndUpdate(req.params.cardId,
-    { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
+    { $addToSet: { likes: LoginUserId } }, // добавить _id в массив, если его там нет
     { new: true },
   ).orFail()
     .then((card) => {
