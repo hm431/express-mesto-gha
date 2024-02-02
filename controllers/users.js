@@ -81,7 +81,6 @@ module.exports.createUsers = (req, res, next) => {
       } else if (err.name === 'ValidationError') {
         next(new BadRequest('z'));
       } else {
-
         next(err);
       }
     });
@@ -91,7 +90,7 @@ module.exports.createUsers = (req, res, next) => {
 module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
   //const { id } = req.params;
-  User.findByIdAndUpdate({ _id: LoginUserId }, { name, about }, { new: true, runValidators: true, },)
+  User.findByIdAndUpdate({ _id: LoginUserId }, { name, about }, { new: true, runValidators: true, })
     .then(user => res.send({ user }))
     .catch(err => {
       console.log(err);
