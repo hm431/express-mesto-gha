@@ -18,20 +18,7 @@ router.get('/:userId',celebrate({
 
 
 
-router.patch('/me', celebrate({
-  params: Joi.object().keys({
-    name: Joi.string()
-    .alphanum()
-    .min(3)
-    .max(30)
-    .required(),
-    about: Joi.string()
-    .alphanum()
-    .min(3)
-    .max(30)
-    .required(),
-  }),
-}), updateUserAbout); // Обновить профиль
+router.patch('/me',  updateUserAbout); // Обновить профиль
 
 router.patch('/me/avatar', celebrate({
   params: Joi.object().keys({
