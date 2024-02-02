@@ -10,7 +10,7 @@ const Forbidden = require('../errors/Forbidden');
 //const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-var  LoginUserId  = '';
+var  LoginUserId  = '65bc3ef2e27e6d0ef1fc1f8c';
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -91,7 +91,9 @@ module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
   //const { id } = req.params;
   User.findByIdAndUpdate({ _id: LoginUserId }, { name, about }, { new: true, runValidators: true, })
-    .then(user => res.send({ user }))
+    .then(user =>{
+      console.log('ssss');
+      res.send({ user })})
     .catch(err => {
       console.log(err);
       if (err.name === 'ValidationError' || err.name === 'CastError') {
