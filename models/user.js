@@ -49,7 +49,7 @@ userSchema.statics.findUserByCredentials = function (email, password) {
       }
       if (!user) {
         console.log('Pomogitre');
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        return Promise.reject();
       }
       return bcrypt.compare(password, user.password)
 
@@ -57,15 +57,14 @@ userSchema.statics.findUserByCredentials = function (email, password) {
 
           if (!matched) {
             console.log('Pomogitre');
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            return Promise.reject();
           }
 
           return user;
         });
     })
-//   .catch((err) => {
+ //  .catch((err) => {
 //      errorMiddlewares(err);
-//    })
-};
+    };
 
 module.exports = mongoose.model('user', userSchema);
