@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 const Conflict = require('../errors/Conflict');
 const BadRequest = require('../errors/NotFound');
-//const Forbidden = require('../errors/Forbidden');
+const Forbidden = require('../errors/Forbidden');
 //const NotFound = require('../errors/NotFound');
 //const StandartError = require('../errors/StandartError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
@@ -18,6 +18,24 @@ module.exports.getUsers = (req, res, next) => {
     .catch(next);
 
 };
+
+module.exports.getUserInfo = (req, res, next) => {
+  User.findById(LoginUserId)
+    .then((user) => {
+      if (user) return res.send({ user });
+      throw new NotFoundE('Пользователь с таким id не найден');
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new Forbidden('Передан некорректный id'));
+      } else {
+        next(err);
+      }
+    });
+
+};
+
+
 
 module.exports.getIdUsers = (req, res, next) => {
  // const { userId } = req.params;
