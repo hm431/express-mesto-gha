@@ -55,7 +55,7 @@ module.exports.createUsers = (req, res, next) => {
     })
     .catch(err => {
       if (err.code === 11000) {
-        next(new Conflict('lklklk'));
+        next(new Conflict(''));
       } else if (err.name === 'ValidationError') {
         next(new BadRequest(''));
       } else {
@@ -98,7 +98,6 @@ module.exports.updateUserAvatar = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  console.log('sdsds');
   return User.findUserByCredentials(email, password)
     .then((user) => {
       console.log(user);
