@@ -148,7 +148,7 @@ module.exports.login = (req, res, next) => {
       throw new Forbidden('Неправильные почта или пароль');
     })
     .catch((err) => {
-    //  throw new UnauthorizedError('Путь не найден');
+
       next(new UnauthorizedError('Путь не найден'))}
       ); //TODo
 }

@@ -5,4 +5,4 @@ class StandartError   extends Error {
   }
 };
 
-module.exports =  StandartError = new StandartError('На сервере произошла ошибка');
+module.exports =  StandartError;

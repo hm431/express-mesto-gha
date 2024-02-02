@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const {SUPERSTRONGSECRET} = require('../utils/constants')
-
-
+const UnauthorizedError = require('../errors/UnauthorizedError');
+const unauthorizedError = new UnauthorizedError('Необходима авторизация')
 const handleAuthError = (res) => {
   res
-    .status(401)
-    .send({ message: 'Необходима авторизация' });
+    .status(unauthorizedError.statusCode)
+    .send({ message: unauthorizedError.message });
+// next(new UnauthorizedError('Путь не найден'))
 };
 
 const extractBearerToken = (header) => {
